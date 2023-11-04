@@ -1,0 +1,7 @@
+#!/bin/sh
+
+echo "Running lint-staged"
+npm run lintStaged
+
+echo "Running tsc"
+npm run listErrors
