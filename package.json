@@ -6,7 +6,8 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
-    "/lib"
+    "/lib",
+    "/types"
   ],
   "author": "https://github.com/Virus288",
   "license": "Apache-2.0",
@@ -20,11 +21,14 @@
     "test": "jest --config tests/jest.config.ts",
     "prepare": "husky install"
   },
-  "dependencies": {},
+  "dependencies": {
+    "ws": "^8.14.2"
+  },
   "devDependencies": {
     "@jest/globals": "^29.3.1",
     "@types/jest": "^29.5.2",
     "@types/node": "18.16.18",
+    "@types/ws": "^8.5.4",
     "@typescript-eslint/eslint-plugin": "^5.55.0",
     "@typescript-eslint/parser": "^5.57.0",
     "eslint": "^8.37.0",
@@ -38,7 +42,7 @@
     "prettier": "^2.8.7",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
-    "typescript": "5.0.4"
+    "typescript": "5.2.2"
   },
   "lint-staged": {
     "*.ts": [
