@@ -3,7 +3,7 @@ import AbstractClient from './abstract';
 import type { IClient } from '../../types';
 
 export default class Client extends AbstractClient implements IClient {
-  private _messages: unknown[] = [];
+  private _messages: unknown[] = ['a', 'b', 'c'];
 
   private get messages(): unknown[] {
     return this._messages;
@@ -16,10 +16,7 @@ export default class Client extends AbstractClient implements IClient {
     const startIndex = Math.max(0, this.messages.length - amount);
     const messages = this.messages.slice(startIndex);
 
-    if (remove) {
-      this.messages.splice(startIndex);
-    }
-
+    if (remove) this.messages.splice(startIndex);
     return messages;
   }
 
@@ -30,20 +27,20 @@ export default class Client extends AbstractClient implements IClient {
     await new Promise<void>((resolve, reject) => {
       this.client = new Websocket(`ws://localhost:${this.port}`, options);
       this.onOpen(() => {
-        console.log('Socket open?');
-        console.log(this.readyState());
         this.disableEvent('open', resolve as (...params: unknown[]) => void | Promise<void>);
         resolve();
       });
       this.onMessage((m) => {
-        this.messages.push(JSON.parse(m as string));
+        try {
+          this.messages.push(JSON.parse(m as string));
+        } catch (err) {
+          this.messages.push(m as string);
+        }
       });
       this.onClose((_code, mess) => {
         this.messages.push(JSON.parse(mess.toString()));
       });
       this.onError((err) => {
-        console.log('On error');
-        console.log(err);
         this.disableEvent('error', reject);
         reject(err);
       });

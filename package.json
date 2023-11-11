@@ -19,8 +19,7 @@
     "listErrors": "node_modules/.bin/tsc --skipLibCheck",
     "lintStaged": "npx lint-staged",
     "test": "jest --config tests/jest.config.ts",
-    "prepare": "husky install",
-    "publish": "npm publish"
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",

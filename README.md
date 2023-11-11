@@ -158,6 +158,3 @@ await client.connect(clientOptions)
 
 - Tests
 - Validate other socket packages like socket.io
-- Add option to ping server
-- sendAsyncMessage = send message and wait for response from server in promise
-- Validation for messages types. If message is not json type, it will throw an error
