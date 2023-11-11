@@ -1,6 +1,6 @@
 import MocSocket from './mocSocket';
 
-export type { ISocketClient } from '../types';
+export type { IClient, ISimpleClient } from '../types';
 
 export { ESocketEvents } from './enums';
 

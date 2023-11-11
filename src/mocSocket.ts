@@ -1,5 +1,6 @@
-import SocketClient from './client';
-import type { ISocketClient, IWebsocketServer } from '../types';
+import Client from './clients/client';
+import SimpleClient from './clients/simpleClient';
+import type { IClient, ISimpleClient, IWebsocketServer } from '../types';
 import type { AddressInfo } from 'ws';
 import http from 'http';
 
@@ -23,8 +24,15 @@ export default class MocSocket {
   /**
    * Create new client
    */
-  createClient(): ISocketClient {
-    return new SocketClient((this.server.address() as AddressInfo).port);
+  createSimpleClient(): ISimpleClient {
+    return new SimpleClient((this.server.address() as AddressInfo).port);
+  }
+
+  /**
+   * Create new client
+   */
+  createClient(): IClient {
+    return new Client((this.server.address() as AddressInfo).port);
   }
 
   /**
