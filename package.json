@@ -21,6 +21,19 @@
     "test": "jest --config tests/jest.config.ts",
     "prepare": "husky install"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Virus288/MocSocket"
+  },
+  "keywords": [
+    "websocket",
+    "ws",
+    "mock",
+    "websocket mock",
+    "test",
+    "testing",
+    "mocSocket"
+  ],
   "dependencies": {
     "ws": "^8.14.2"
   },

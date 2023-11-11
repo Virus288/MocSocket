@@ -10,7 +10,7 @@ export default class SimpleClient extends AbstractClient implements ISimpleClien
   /**
    * Create new client
    */
-  connect(): void {
-    this.client = new Websocket(`ws://localhost:${this.port}`);
+  connect(options: Websocket.ClientOptions = {}): void {
+    this.client = new Websocket(`ws://localhost:${this.port}`, options);
   }
 }

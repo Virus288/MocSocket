@@ -22,10 +22,6 @@ export default abstract class AbstractClient implements IBaseClient {
     this._client = value;
   }
 
-  readyState(): 0 | 1 | 2 | 3 | undefined {
-    return this._client?.readyState;
-  }
-
   disableEvent(event: ESocketEvents | string, action: (...params: unknown[]) => void | Promise<void>): void {
     !this.client ? console.log('Client not open') : this.client.off(event, action);
   }
@@ -42,10 +38,10 @@ export default abstract class AbstractClient implements IBaseClient {
     }
   }
 
-  onMessage(action: (data: WebSocket.RawData | string, isBinary: boolean) => void | Promise<void>): void {
+  onMessage(action: (message: WebSocket.RawData | string, isBinary: boolean) => void | Promise<void>): void {
     !this.client
       ? console.log('Client not open')
-      : this.client.on('message', (data, isBinary) => action(data, isBinary));
+      : this.client.on('message', (message, isBinary) => action(message, isBinary));
   }
 
   onError(action: (e: Error) => void | Promise<void>): void {
@@ -54,5 +50,9 @@ export default abstract class AbstractClient implements IBaseClient {
 
   onClose(action: (code: number, message: Buffer) => void | Promise<void>): void {
     !this.client ? console.log('Client not open') : this.client.on('close', (code, message) => action(code, message));
+  }
+
+  readyState(): 0 | 1 | 2 | 3 | undefined {
+    return this._client?.readyState;
   }
 }
