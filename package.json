@@ -1,6 +1,6 @@
 {
   "name": "moc-socket",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Websocket mocking utility",
   "productName": "MocSocket",
   "main": "lib/index.js",
@@ -19,7 +19,8 @@
     "listErrors": "node_modules/.bin/tsc --skipLibCheck",
     "lintStaged": "npx lint-staged",
     "test": "jest --config tests/jest.config.ts",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "publish": "npm publish"
   },
   "repository": {
     "type": "git",
