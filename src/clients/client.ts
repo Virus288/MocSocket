@@ -3,7 +3,7 @@ import AbstractClient from './abstract';
 import type { IClient } from '../../types';
 
 export default class Client extends AbstractClient implements IClient {
-  private _messages: unknown[] = ['a', 'b', 'c'];
+  private _messages: unknown[] = [];
 
   private get messages(): unknown[] {
     return this._messages;

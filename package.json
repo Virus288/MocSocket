@@ -1,6 +1,6 @@
 {
   "name": "moc-socket",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Websocket mocking utility",
   "productName": "MocSocket",
   "main": "lib/index.js",
