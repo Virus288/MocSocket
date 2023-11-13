@@ -1,4 +1,5 @@
 import { ESocketEvents } from '../enums';
+import { ClientNotOpen } from '../errors';
 import type { IBaseClient, ISendAsyncMessageConfig, ISendMessageConfig } from '../../types';
 import type WebSocket from 'ws';
 
@@ -8,6 +9,7 @@ export default abstract class AbstractClient implements IBaseClient {
 
   constructor(port: number) {
     this._port = port;
+    return new Proxy(this, this.createHandler());
   }
 
   protected get port(): number {
@@ -23,42 +25,32 @@ export default abstract class AbstractClient implements IBaseClient {
   }
 
   disableEvent(event: ESocketEvents | string, action: (...params: unknown[]) => void | Promise<void>): void {
-    !this.client ? console.log('Client not open') : this.client.off(event, action);
+    this.client!.off(event, action);
   }
 
   disconnect(code?: number, data?: string | Buffer): void {
-    !this.client ? console.log('Client not open') : this.client.close(code, data);
+    this.client!.close(code, data);
   }
 
   sendMessage(message: unknown, options?: ISendMessageConfig): void {
-    if (!this.client) {
-      console.log('Client not open');
-      return;
-    }
-
     if (options?.delayed) {
       setTimeout(() => {
         this.client!.send(JSON.stringify(message));
       }, options.delayed);
     }
-
-    this.client.send(JSON.stringify(message));
+    this.client!.send(JSON.stringify(message));
   }
 
   onMessage(action: (message: WebSocket.RawData | string, isBinary: boolean) => void | Promise<void>): void {
-    !this.client
-      ? console.log('Client not open')
-      : this.client.on(ESocketEvents.Message, (message, isBinary) => action(message, isBinary));
+    this.client!.on(ESocketEvents.Message, (message, isBinary) => action(message, isBinary));
   }
 
   onError(action: (e: Error) => void | Promise<void>): void {
-    !this.client ? console.log('Client not open') : this.client.on(ESocketEvents.Error, (e) => action(e));
+    this.client!.on(ESocketEvents.Error, (e) => action(e));
   }
 
   onClose(action: (code: number, message: Buffer) => void | Promise<void>): void {
-    !this.client
-      ? console.log('Client not open')
-      : this.client.on(ESocketEvents.Close, (code, message) => action(code, message));
+    this.client!.on(ESocketEvents.Close, (code, message) => action(code, message));
   }
 
   readyState(): 0 | 1 | 2 | 3 | undefined {
@@ -66,18 +58,13 @@ export default abstract class AbstractClient implements IBaseClient {
   }
 
   ping(data?: unknown, mask?: boolean, action?: (e: Error) => void): void {
-    !this.client ? console.log('Client not open') : this.client.ping(data, mask, action);
+    this.client!.ping(data, mask, action);
   }
 
   /**
    * Create new client
    */
   async sendAsyncMessage(message: unknown, options?: ISendAsyncMessageConfig): Promise<unknown> {
-    if (!this.client) {
-      console.log('Client not open');
-      return undefined;
-    }
-
     return new Promise((resolve) => {
       const delayed: NodeJS.Timeout | undefined = undefined;
 
@@ -103,5 +90,29 @@ export default abstract class AbstractClient implements IBaseClient {
         }
       });
     });
+  }
+
+  close(): void {
+    this.client?.close();
+  }
+
+  private createHandler(): ProxyHandler<this> {
+    return {
+      get: (target: this, prop: string, receiver): (() => void) => {
+        const value = target[prop as keyof this];
+
+        if (value instanceof Function) {
+          const allowedActions = ['connect', 'close'];
+          if (!allowedActions.includes(prop)) {
+            if (!this.client) throw new ClientNotOpen();
+          }
+
+          return (...args) => {
+            return value.apply(this === receiver ? target : this, args) as unknown;
+          };
+        }
+        return value as () => void;
+      },
+    };
   }
 }

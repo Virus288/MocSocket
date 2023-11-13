@@ -153,8 +153,3 @@ const mock = new MocSocket(server);
 const client = mock.createClient()
 await client.connect(clientOptions)
 ```
-
-## TODO
-
-- Tests
-- Validate other socket packages like socket.io

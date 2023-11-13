@@ -9,6 +9,8 @@ export interface IWebsocketServer extends EventEmitter {
     upgradeHead: Buffer,
     callback: (client: unknown, request: IncomingMessage) => void,
   ): void;
+
+  close(cb?: (err?: Error) => void): void;
 }
 
 export * from './clients';
