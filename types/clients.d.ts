@@ -20,6 +20,8 @@ export interface IBaseClient {
   ping(data?: unknown, mask?: boolean, cb?: (err: Error) => void): void;
 
   sendAsyncMessage(message: unknown, options?: ISendAsyncMessageConfig): Promise<unknown>;
+
+  close(): void;
 }
 
 export interface IClient extends IBaseClient {

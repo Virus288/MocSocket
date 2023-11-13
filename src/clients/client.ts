@@ -32,13 +32,17 @@ export default class Client extends AbstractClient implements IClient {
       });
       this.onMessage((m) => {
         try {
-          this.messages.push(JSON.parse(m as string));
+          this.messages.push(JSON.parse(m.toString()));
         } catch (err) {
-          this.messages.push(m as string);
+          this.messages.push(m.toString());
         }
       });
-      this.onClose((_code, mess) => {
-        this.messages.push(JSON.parse(mess.toString()));
+      this.onClose((_code, m) => {
+        try {
+          this.messages.push(JSON.parse(m.toString()));
+        } catch (err) {
+          this.messages.push(m.toString());
+        }
       });
       this.onError((err) => {
         this.disableEvent('error', reject);
@@ -48,6 +52,6 @@ export default class Client extends AbstractClient implements IClient {
   }
 
   private onOpen(action: (...params: unknown[]) => void | Promise<void>): void {
-    !this.client ? console.log('Client not open') : this.client.on('open', action);
+    this.client!.on('open', action);
   }
 }
