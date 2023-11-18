@@ -4,29 +4,41 @@ on:
   push:
     branches:
       - '*'
+  pull_request:
+    branches:
+      - '*'
 
 jobs:
+  install-and-test:
+    runs-on: ubuntu-latest
+
+    container:
+      image: node:18-alpine
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm run test
+
   build:
+    needs: install-and-test
+
     runs-on: ubuntu-latest
 
     container:
       image: node:18-alpine
 
     steps:
-    - name: Install dependencies
-      run: npm install
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Build
-      run: npm run build
-  test:
-    runs-on: ubuntu-latest
+      - name: Install dependencies
+        run: npm install
 
-    container:
-      image: node:18-alpine
-
-    steps:
-    - name: Install dependencies
-      run: npm install
-
-    - name: Test
-      run: npm run test
+      - name: Build
+        run: npm run build
