@@ -1,3 +1,4 @@
+// eslint-disable-next-line max-classes-per-file
 export class NoServer extends Error {
   constructor() {
     super('NoServer');
