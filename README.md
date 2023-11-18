@@ -46,7 +46,7 @@ client.connect()
 
 Default
 
-```typescript
+```typescript 
 const client = mock.createClient()
 await client.connect()
 ```
