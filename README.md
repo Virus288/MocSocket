@@ -1,7 +1,7 @@
 # MocSocket - mock websocket connection with ease
 
 I was looking for simple package to mock websocket server and generate clients. Something as easy as superTest. I've
-created it myself
+created it myself.
 
 ## TLDR:
 
