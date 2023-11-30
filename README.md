@@ -18,6 +18,7 @@ created it myself
 ## 1. Supported servers:
 
 - [ws](https://www.npmjs.com/package/ws). Tested on version 8+
+- [socket.io](https://www.npmjs.com/package/socket.io). Tested on version 4.7+
 
 ## 2. How to use
 
